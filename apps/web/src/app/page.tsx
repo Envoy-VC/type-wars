@@ -1,3 +1,5 @@
+import { Button } from '@repo/ui/components/button';
+import Link from 'next/link';
 import { WalletInteractions } from '~/components';
 
 const Home = () => {
@@ -9,6 +11,12 @@ const Home = () => {
         in a Flash
       </div>
       <WalletInteractions />
+      <Button
+        asChild={true}
+        className='mx-auto w-fit'
+      >
+        <Link href='/start'>Start Typing...</Link>
+      </Button>
     </div>
   );
 };

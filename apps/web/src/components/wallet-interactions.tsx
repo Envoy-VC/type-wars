@@ -28,7 +28,7 @@ export const WalletInteractions = () => {
   return (
     <div className='mx-auto flex'>
       {wallet && (
-        <div className='flex flex-col items-center gap-2'>
+        <div className='flex flex-row items-center gap-2'>
           <div className='flex flex-row items-center gap-2 rounded-2xl border-2 px-2'>
             <div className=' py-2'>{truncate({ text: wallet.address })}</div>
             <div className='h-fit rounded-lg bg-neutral-800 px-2 py-1'>
