@@ -9,6 +9,7 @@ import {
 import { api } from '~/trpc/react';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { toast } from 'sonner';
 import { createWalletClient } from 'viem';
 import { truncate } from '~/lib/utils';
@@ -28,6 +29,13 @@ export const useWallet = () => {
 
   const fundMutation = api.fund.fund.useMutation();
 
+  const walletClient = useMemo(() => {
+    if (!wallet) return null;
+    const account = privateKeyToAccount(wallet?.privateKey as `0x${string}`);
+    const walletClient = createWalletClient({ ...baseConfig, account });
+    return walletClient;
+  }, [wallet]);
+
   const createWallet = () => {
     const privateKey = generatePrivateKey();
     const address = privateKeyToAddress(privateKey);
@@ -46,21 +54,20 @@ export const useWallet = () => {
       });
       toast.success(`ETH Drip Successful! ${truncate({ text: hash })}`, { id });
     } catch (error: unknown) {
-      console.error(error);
       toast.error((error as Error).message, { id });
     }
   };
 
   const runTransaction = async () => {
-    if (!wallet) return;
-    const account = privateKeyToAccount(wallet?.privateKey as `0x${string}`);
-    const walletClient = createWalletClient({ ...baseConfig, account });
+    if (!walletClient) return;
+    const now = Date.now();
     if (blockType === 'flashblock') {
       const hash = await walletClient.sendTransaction({
         to: '0x0000000000000000000000000000000000000000',
         value: BigInt(0),
       });
-
+      const next = Date.now();
+      const now1 = Date.now();
       socket.onmessage = async (ev: MessageEvent<Blob>) => {
         const text = await ev.data.text();
         const json = JSON.parse(text);
@@ -68,6 +75,7 @@ export const useWallet = () => {
         const receipts = json.metadata.receipts as Record<string, unknown>;
         const receipt = receipts[hash];
         if (receipt) {
+          const next1 = Date.now();
           socket.close();
         }
       };
