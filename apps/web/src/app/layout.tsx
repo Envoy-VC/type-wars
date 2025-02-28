@@ -4,6 +4,8 @@ import { TRPCReactProvider } from '~/trpc/react';
 
 import type { ReactNode } from 'react';
 import '@repo/ui/globals.css';
+import Image from 'next/image';
+import MockupImage from 'public/mockup.png';
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -18,7 +20,24 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
       lang='en'
     >
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <div className='mx-auto h-screen w-full'>
+            <div className='relative mx-auto hidden h-screen w-fit sm:flex'>
+              <Image
+                src={MockupImage}
+                alt='mockup'
+                width={500}
+                height={500}
+                className='object-cover'
+                priority={true}
+              />
+              <div className='-translate-x-1/2 -translate-y-1/2 absolute top-[53%] left-1/2 h-[85%] w-[90%] rounded-t-[2rem] rounded-b-[4rem] bg-background'>
+                {children}
+              </div>
+            </div>
+            <div className='flex sm:hidden'>{children}</div>
+          </div>
+        </TRPCReactProvider>
       </body>
     </html>
   );
