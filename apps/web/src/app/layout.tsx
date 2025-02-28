@@ -27,7 +27,7 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
       <body>
         <ThemeProvider>
           <TRPCReactProvider>
-            <div className='mx-auto h-screen w-full bg-background text-foreground'>
+            <div className='mx-auto h-full max-h-screen min-h-screen w-full bg-background text-foreground sm:max-h-full sm:min-h-full'>
               <div className='relative mx-auto hidden h-screen w-fit sm:flex'>
                 <Image
                   src={MockupImage}
@@ -42,7 +42,7 @@ const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
                   {children}
                 </div>
               </div>
-              <div className='flex flex-col sm:hidden'>
+              <div className='flex h-screen flex-col sm:hidden'>
                 <Navbar />
                 {children}
               </div>
