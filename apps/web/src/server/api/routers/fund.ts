@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { env } from '~/env';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-import { http, createPublicClient, createWalletClient, parseEther } from 'viem';
+import { http, createPublicClient, createWalletClient } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { baseSepolia } from 'viem/chains';
 
@@ -29,6 +29,7 @@ export const fundRouter = createTRPCRouter({
       if (balance.isGreaterThanOrEqualTo(threshold)) {
         throw new Error('Already funded');
       }
+      const toFund = threshold.minus(balance);
       const walletClient = createWalletClient({
         account,
         chain: baseSepolia,
@@ -37,7 +38,7 @@ export const fundRouter = createTRPCRouter({
 
       const fundRes = await walletClient.sendTransaction({
         to: address,
-        value: parseEther('0.001'),
+        value: BigInt(toFund.toNumber()),
       });
 
       return fundRes;
