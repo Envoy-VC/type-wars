@@ -56,21 +56,11 @@ export const useWallet = () => {
     const account = privateKeyToAccount(wallet?.privateKey as `0x${string}`);
     const walletClient = createWalletClient({ ...baseConfig, account });
     if (blockType === 'flashblock') {
-      const hash = await walletClient.sendTransaction({
+      const hash = walletClient.sendTransaction({
         to: '0x0000000000000000000000000000000000000000',
         value: BigInt(0),
       });
-
-      socket.onmessage = async (ev: MessageEvent<Blob>) => {
-        const text = await ev.data.text();
-        const json = JSON.parse(text);
-
-        const receipts = json.metadata.receipts as Record<string, unknown>;
-        const receipt = receipts[hash];
-        if (receipt) {
-          socket.close();
-        }
-      };
+      await new Promise((resolve) => setTimeout(resolve, 200));
     } else {
       const hash = await walletClient.sendTransaction({
         to: '0x0000000000000000000000000000000000000000',
