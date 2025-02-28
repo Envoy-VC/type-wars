@@ -49,7 +49,7 @@ export const useWallet = () => {
         throw new Error('No wallet found');
       }
       const hash = await fundMutation.mutateAsync({ address: wallet?.address });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['wallet-balance', wallet.address],
       });
       toast.success(`ETH Drip Successful! ${truncate({ text: hash })}`, { id });
@@ -60,14 +60,11 @@ export const useWallet = () => {
 
   const runTransaction = async () => {
     if (!walletClient) return;
-    const now = Date.now();
     if (blockType === 'flashblock') {
       const hash = await walletClient.sendTransaction({
         to: '0x0000000000000000000000000000000000000000',
         value: BigInt(0),
       });
-      const next = Date.now();
-      const now1 = Date.now();
       socket.onmessage = async (ev: MessageEvent<Blob>) => {
         const text = await ev.data.text();
         const json = JSON.parse(text);
@@ -75,7 +72,6 @@ export const useWallet = () => {
         const receipts = json.metadata.receipts as Record<string, unknown>;
         const receipt = receipts[hash];
         if (receipt) {
-          const next1 = Date.now();
           socket.close();
         }
       };
