@@ -1,9 +1,9 @@
-import { Keyboard } from '~/components';
+import { Keyboard, Sentence } from '~/components';
 
 const StartTyping = () => {
   return (
     <div className='flex h-full flex-col justify-between'>
-      <div>Sentence</div>
+      <Sentence />
       <Keyboard />
     </div>
   );

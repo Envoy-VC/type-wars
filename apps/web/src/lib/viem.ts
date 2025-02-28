@@ -1,12 +1,13 @@
 import { http, createPublicClient } from 'viem';
 import { baseSepolia } from 'viem/chains';
+import { env } from '~/env';
 
 export const basePublicClient = createPublicClient({
   chain: baseSepolia,
-  transport: http(),
+  transport: http(env.NEXT_PUBLIC_RPC_URL),
 });
 
-export const baseFlashBlockPublicClient = createPublicClient({
+export const baseConfig = {
   chain: baseSepolia,
-  transport: http('https://sepolia-preconf.base.org/'),
-});
+  transport: http(env.NEXT_PUBLIC_RPC_URL),
+};

@@ -55,7 +55,11 @@ export const keys = [
   ] as const,
   // Row 5
   [
-    { key: '?/@', className: 'w-14 h-13 text-lg rounded-3xl', value: '?/@' },
+    {
+      key: 'symbols',
+      className: 'w-14 h-13 text-lg rounded-3xl',
+      value: '?/@',
+    },
     { key: 'space', className: 'text-xl w-[14rem] h-13', value: '' },
     {
       key: 'dot',
